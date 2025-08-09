@@ -1,0 +1,36 @@
+// file: services/user.service.js
+
+import db from "../models/index.js";
+const { User } = db;
+
+export const createUser = async (userData) => {
+  return await User.create(userData);
+};
+
+export const getAllUsers = async () => {
+  // Menghapus credential_id dan no_nik dari list untuk keamanan
+  return await User.findAll({
+    attributes: { exclude: ['credential_id', 'no_nik', 'photo_ktp'] }
+  });
+};
+
+export const getUserById = async (id) => {
+  return await User.findByPk(id);
+};
+
+export const updateUser = async (id, userData) => {
+  const user = await User.findByPk(id);
+  if (!user) {
+    return null; // Controller akan menangani not found
+  }
+  return await user.update(userData);
+};
+
+export const deleteUser = async (id) => {
+  const user = await User.findByPk(id);
+  if (!user) {
+    return null;
+  }
+  await user.destroy();
+  return { message: "Pengguna berhasil dihapus." };
+};
