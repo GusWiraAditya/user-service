@@ -21,12 +21,7 @@ export const create = async (req, res) => {
 export const findAll = async (req, res) => {
   try {
     const users = await userService.getAllUsers();
-    if (!users || users.length === 0) {
-      return res.status(404).json({ message: "User tidak ditemukan." });
-    }
-    res.status(200).json({
-      data: users
-    });
+    res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
