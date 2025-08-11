@@ -9,10 +9,8 @@ import feedbackRoutes from './src/api/feedback.routes.js';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware untuk membaca JSON
 app.use(express.json());
 
-// Fungsi untuk tes koneksi database
 async function testDbConnection() {
   try {
     await db.sequelize.authenticate();
@@ -22,14 +20,13 @@ async function testDbConnection() {
   }
 }
 
-// Route sederhana untuk tes server
 app.get('/', (req, res) => {
   res.json({ message: 'Selamat datang di Users Service API.' });
 });
 
-app.use('/api/users', userRoutes); // <-- BARIS BARU 2
-app.use('/api/complaints', complaintRoutes); // <-- BARIS BARU 2
-app.use('/api/feedbacks', feedbackRoutes); // <-- BARIS BARU 2
+app.use('/api/users', userRoutes);
+app.use('/api/complaints', complaintRoutes);
+app.use('/api/feedbacks', feedbackRoutes);
 
 // Jalankan server
 app.listen(PORT, () => {

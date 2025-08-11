@@ -8,7 +8,6 @@ export const createUser = async (userData) => {
 };
 
 export const getAllUsers = async () => {
-  // Menghapus credential_id dan no_nik dari list untuk keamanan
   return await User.findAll({
     attributes: { exclude: ['credential_id', 'no_nik', 'photo_ktp'] }
   });
@@ -21,7 +20,7 @@ export const getUserById = async (id) => {
 export const updateUser = async (id, userData) => {
   const user = await User.findByPk(id);
   if (!user) {
-    return null; // Controller akan menangani not found
+    return null;
   }
   return await user.update(userData);
 };
