@@ -12,7 +12,7 @@ export const create = async (req, res) => {
     const complaint = await complaintService.createComplaint(req.body);
     res.status(201).json({
       message: "Keluhan berhasil ditambahkan",
-      data: complaint
+      data: complaint,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -55,13 +55,16 @@ export const update = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
   try {
-    const updated = await complaintService.updateComplaint(req.params.id, req.body);
+    const updated = await complaintService.updateComplaint(
+      req.params.id,
+      req.body
+    );
     if (!updated) {
       return res.status(404).json({ message: "Keluhan tidak ditemukan." });
     }
     res.status(200).json({
       message: "Keluhan berhasil diubah",
-      data: updated
+      data: updated,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
