@@ -40,6 +40,15 @@ export const findOne = async (req, res) => {
   }
 };
 
+export const findAllByUser = async (req, res) => {
+  try {
+    const complaints = await complaintService.getAllByUser(req.params.userId);
+    res.status(200).json({ data: complaints });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 export const update = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

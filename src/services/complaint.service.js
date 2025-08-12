@@ -27,6 +27,16 @@ export const getComplaintById = async (id) => {
     }]
   });
 };
+export const getAllByUser = async (user_id) => {
+  return await Complaint.findAll({
+    where: { user_id: user_id },
+    include: [{
+      model: User,
+      attributes: userAttributes,
+    }],
+    order: [['createdAt', 'DESC']],
+  });
+};
 
 export const updateComplaint = async (id, complaintData) => {
   const complaint = await Complaint.findByPk(id);

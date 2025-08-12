@@ -9,6 +9,7 @@ const router = express.Router();
 router.post('/', validateCreateComplaint, complaintController.create);
 router.get('/', complaintController.findAll);
 router.get('/:id', complaintController.findOne);
+router.get('/user/:userId', complaintController.findAllByUser);
 router.put('/:id', validateUpdateComplaint, complaintController.update);
 router.delete('/:id', complaintController.remove);
 

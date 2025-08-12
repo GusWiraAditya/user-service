@@ -9,7 +9,13 @@ export const createUser = async (userData) => {
 
 export const getAllUsers = async () => {
   return await User.findAll({
-    attributes: { exclude: ['credential_id', 'no_nik', 'photo_ktp'] }
+    attributes: [
+      "id",
+      "full_name",
+      "nickname",
+      "contribution",
+      "phone_number",
+    ],
   });
 };
 
