@@ -40,6 +40,15 @@ export const findOne = async (req, res) => {
   }
 };
 
+export const findAllByUser = async (req, res) => {
+  try {
+    const feedbacks = await feedbackService.getFeedbacksByUserId(req.params.userId);
+    res.status(200).json({ data: feedbacks });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 export const update = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
