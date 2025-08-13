@@ -28,6 +28,17 @@ export const getFeedbackById = async (id) => {
   });
 };
 
+export const getFeedbacksByUserId = async (userId) => {
+  return await Feedback.findAll({
+    where: { userId },
+    include: [{
+      model: User,
+      attributes: userAttributes,
+    }],
+    order: [['createdAt', 'DESC']],
+  });
+};
+
 export const updateFeedback = async (id, feedbackData) => {
   const feedback = await Feedback.findByPk(id);
   if (!feedback) {
