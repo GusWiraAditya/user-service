@@ -9,6 +9,7 @@ const router = express.Router();
 router.post('/', validateCreateFeedback, feedbackController.create);
 router.get('/', feedbackController.findAll);
 router.get('/:id', feedbackController.findOne);
+router.get('/user/:userId', feedbackController.findAllByUser);
 router.put('/:id', validateUpdateFeedback, feedbackController.update);
 router.delete('/:id', feedbackController.remove);
 
