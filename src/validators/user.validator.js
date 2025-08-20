@@ -60,7 +60,8 @@ export const validateCreateUser = [
         if (user) return Promise.reject("NIK sudah terdaftar.");
       }
     }),
-  body("photo_ktp").optional().isURL().withMessage("URL foto KTP tidak valid."),
+  // body("photo_ktp").optional().isURL().withMessage("URL foto KTP tidak valid."),
+  body("photo_ktp").optional(),
 ];
 
 // Aturan validasi untuk update User
@@ -113,5 +114,6 @@ export const validateUpdateUser = [
     .optional()
     .isLength({ min: 16, max: 16 })
     .withMessage("NIK harus 16 digit."),
-  body("photo_ktp").optional().isURL().withMessage("URL foto KTP tidak valid."),
+  // body("photo_ktp").optional().isURL().withMessage("URL foto KTP tidak valid."),
+  body("photo_ktp").optional(),
 ];
