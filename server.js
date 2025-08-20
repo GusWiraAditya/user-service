@@ -11,6 +11,11 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
+  app.use((req, res, next) => {
+    console.log(`✅ Request Diterima dari Gateway: Method=${req.method}, Path=${req.originalUrl}`);
+    next();
+  });
+
 async function testDbConnection() {
   try {
     await db.sequelize.authenticate();
@@ -23,6 +28,8 @@ async function testDbConnection() {
 app.get('/', (req, res) => {
   res.json({ message: 'Selamat datang di Users Service API.' });
 });
+
+
 
 app.use('/api/users', userRoutes);
 app.use('/api/complaints', complaintRoutes);
