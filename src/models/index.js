@@ -13,9 +13,8 @@ const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || "development";
 
 // --- Impor Konfigurasi ---
-const configPath = path.join(__dirname, "..", "config", "config.json");
-const configJson = JSON.parse(fs.readFileSync(configPath, "utf8"));
-const config = configJson[env];
+import configModule from "../config/database.cjs";
+const config = configModule[env];
 
 const db = {};
 let sequelize;

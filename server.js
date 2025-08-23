@@ -4,17 +4,18 @@ import db from './src/models/index.js';
 import userRoutes from './src/api/user.routes.js'; // 
 import complaintRoutes from './src/api/complaint.routes.js';
 import feedbackRoutes from './src/api/feedback.routes.js';
-
+import { verifyInternalRequest } from './src/middleware/auth.internal.middleware.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(verifyInternalRequest);
 
   app.use((req, res, next) => {
-    console.log(`✅ Request Diterima dari Gateway: Method=${req.method}, Path=${req.originalUrl}`);
+    console.log(`✅ Request Terverifikasi Diterima: Method=${req.method}, Path=${req.originalUrl}`);
     next();
-  });
+});
 
 async function testDbConnection() {
   try {
