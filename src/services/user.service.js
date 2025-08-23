@@ -39,3 +39,11 @@ export const deleteUser = async (id) => {
   await user.destroy();
   return { message: "Pengguna berhasil dihapus." };
 };
+
+export const updateUserKtp = async (id, filePath) => {
+  const user = await User.findByPk(id);
+  if (!user) {
+    return null;
+  }
+  return await user.update({ photo_ktp: filePath });
+};
