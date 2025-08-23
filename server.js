@@ -8,8 +8,8 @@ import complaintRoutes from "./src/api/complaint.routes.js";
 import feedbackRoutes from "./src/api/feedback.routes.js";
 import { verifyInternalRequest } from "./src/middleware/auth.internal.middleware.js";
 
-const _filename = fileURLToPath(import.meta.url);
-const _dirname = path.dirname(_filename);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -22,7 +22,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/public", express.static(path.join(_dirname, "public")));
+app.use("/public", express.static(path.join(__dirname, "public")));
 
 async function testDbConnection() {
   try {
@@ -56,6 +56,6 @@ app.use((req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`🚀 Server berjalan di http://localhost:${PORT}`);
-  console.log(`📁 Static files served from: ${path.join(_dirname, "public")}`);
+  console.log(`📁 Static files served from: ${path.join(__dirname, "public")}`);
   testDbConnection();
 });
