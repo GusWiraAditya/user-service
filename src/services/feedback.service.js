@@ -30,13 +30,13 @@ export const getFeedbackById = async (id) => {
 
 export const getFeedbacksByUserId = async (userId) => {
   return await Feedback.findAll({
-    where: { userId },
+    where: { user_id: userId },
     include: [{
       model: User,
       attributes: userAttributes,
     }],
     order: [['createdAt', 'DESC']],
-  });
+  });
 };
 
 export const updateFeedback = async (id, feedbackData) => {
