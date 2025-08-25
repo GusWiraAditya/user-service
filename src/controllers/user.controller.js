@@ -102,3 +102,29 @@ export const uploadKtp = async (req, res) => {
     res.status(500).json({ message: "Terjadi kesalahan pada server.", error: error.message });
   }
 };
+
+export const getKtp = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const user = await userService.getUserById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User tidak ditemukan." });
+    }
+
+    const filePath = user.photo_ktp;
+    if (!filePath) {
+      return res.status(404).json({ message: "KTP tidak ditemukan." });
+    }
+
+    res.status(200).json({
+      message: "KTP ditemukan.",
+      data: {
+        userId: id,
+        filePath: filePath,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Terjadi kesalahan pada server.", error: error.message });
+  }
+};

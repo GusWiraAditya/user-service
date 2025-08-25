@@ -60,4 +60,6 @@ router.post(
   upload.single("photo_ktp"),
   userController.uploadKtp
 );
+router.get("/:id/ktp", userController.getKtp);
+
 export default router;
