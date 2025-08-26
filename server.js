@@ -12,26 +12,19 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3005;
 
 app.use(express.json());
-app.use(verifyInternalRequest);
+app.use("/public", express.static(path.join(__dirname, "public")));
 
 app.use((req, res, next) => {
-  console.log(`✅ Request Diterima dari Gateway: Method=${req.method}, Path=${req.originalUrl}`);
+  console.log(
+    `✅ Request Diterima dari Gateway: Method=${req.method}, Path=${req.originalUrl}`
+  );
   next();
 });
 
-app.use("/public", express.static(path.join(__dirname, "public")));
-
-async function testDbConnection() {
-  try {
-    await db.sequelize.authenticate();
-    console.log("✅ Koneksi ke database berhasil.");
-  } catch (error) {
-    console.error("❌ Gagal terhubung ke database:", error);
-  }
-}
+app.use(verifyInternalRequest);
 
 app.get("/", (req, res) => {
   res.json({ message: "Selamat datang di Users Service API." });
@@ -54,6 +47,14 @@ app.use((req, res, next) => {
   }
 });
 
+async function testDbConnection() {
+  try {
+    await db.sequelize.authenticate();
+    console.log("✅ Koneksi ke database berhasil.");
+  } catch (error) {
+    console.error("❌ Gagal terhubung ke database:", error);
+  }
+}
 app.listen(PORT, () => {
   console.log(`🚀 Server berjalan di http://localhost:${PORT}`);
   console.log(`📁 Static files served from: ${path.join(__dirname, "public")}`);

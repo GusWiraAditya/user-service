@@ -1,5 +1,4 @@
 // file: services/user.service.js
-
 import db from "../models/index.js";
 const { User } = db;
 
@@ -40,10 +39,6 @@ export const deleteUser = async (id) => {
   return { message: "Pengguna berhasil dihapus." };
 };
 
-export const updateUserKtp = async (id, filePath) => {
-  const user = await User.findByPk(id);
-  if (!user) {
-    return null;
-  }
+export const updateUserKtp = async (user, filePath) => {
   return await user.update({ photo_ktp: filePath });
 };

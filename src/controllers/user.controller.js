@@ -1,6 +1,8 @@
 import * as userService from "../services/user.service.js";
 import { validationResult } from "express-validator";
-
+import fs from 'fs/promises'; // Gunakan versi promises untuk async/await
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 export const create = async (req, res) => {
    const errors = validationResult(req);
@@ -75,31 +77,48 @@ export const remove = async (req, res) => {
   }
 };
 
-export const uploadKtp = async (req, res) => {
+export const uploadKtp = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const user = req.user; 
 
     if (!req.file) {
       return res.status(400).json({ message: "Tidak ada file yang diunggah." });
     }
 
-    const filePath = req.file.path;
+    const oldPhotoUrl = user.photo_ktp;
 
-    const updatedUser = await userService.updateUserKtp(id, filePath);
+    if (oldPhotoUrl) {
+      try {
+        const __filename = fileURLToPath(import.meta.url);
+        const __dirname = path.dirname(__filename);
+        
+        const oldPhotoPathname = new URL(oldPhotoUrl).pathname;
+        const oldFilePath = path.join(__dirname, '..', '..', 'public', oldPhotoPathname);
+        
+        console.log(`[DEBUG] Menghapus file lama di: ${oldFilePath}`);
+        
+        await fs.unlink(oldFilePath);
+        console.log(`[INFO] File lama ${oldFilePath} berhasil dihapus.`);
 
-    if (!updatedUser) {
-      return res.status(404).json({ message: "User tidak ditemukan." });
+      } catch (deleteError) {
+        if (deleteError.code !== 'ENOENT') {
+          console.warn("Gagal menghapus file lama, tapi proses upload tetap dilanjutkan:", deleteError);
+        }
+      }
     }
+    const newFileUrl = `${req.protocol}://${req.get('host')}/public/uploads/ktp/${req.file.filename}`;
+
+    const updatedUser = await userService.updateUserKtp(user, newFileUrl);
 
     res.status(200).json({
-      message: "Foto KTP berhasil diunggah.",
+      message: "Foto KTP berhasil diunggah dan foto lama (jika ada) telah dihapus.",
       data: {
-        userId: id,
-        filePath: filePath,
+        userId: user.id,
+        filePath: newFileUrl,
       },
     });
   } catch (error) {
-    res.status(500).json({ message: "Terjadi kesalahan pada server.", error: error.message });
+    next(error);
   }
 };
 

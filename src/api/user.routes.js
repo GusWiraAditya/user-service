@@ -8,22 +8,22 @@ import {
   validateUpdateUser,
 } from "../validators/user.validator.js";
 import * as userController from "../controllers/user.controller.js";
+import { findUserById } from '../middleware/user.middleware.js';
 
 const router = express.Router();
 
 const ktpStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadPath = "public/uploads/ktp";
-
     fs.mkdirSync(uploadPath, { recursive: true });
-
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
-    const userId = req.params.id;
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const user = req.user; 
+    const sanitizedUserName = user.full_name.replace(/\s+/g, '-').toLowerCase();
+    const uniqueSuffix = Date.now();
     const extension = path.extname(file.originalname);
-    cb(null, `ktp-${userId}-${uniqueSuffix}${extension}`);
+    cb(null, `ktp-${sanitizedUserName}-${user.id}-${uniqueSuffix}${extension}`);
   },
 });
 
@@ -43,7 +43,7 @@ const upload = multer({
   storage: ktpStorage,
   fileFilter: ktpFileFilter,
   limits: {
-    fileSize: 1024 * 1024 * 5, // 5MB
+    fileSize: 1024 * 1024 * 5,
   },
 });
 
@@ -57,6 +57,7 @@ router.delete("/:id", userController.remove);
 // Route untuk upload KTP
 router.post(
   "/:id/upload-ktp",
+   findUserById,
   upload.single("photo_ktp"),
   userController.uploadKtp
 );
