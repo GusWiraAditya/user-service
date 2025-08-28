@@ -50,9 +50,9 @@ export const validateCreateUser = [
     .isIn(CONTRIBUTIONS)
     .withMessage("Tipe kontribusi tidak valid."),
 
-  // Semua field di bawah opsional
+  // opsional tapi ga boleh kosong string
   body("no_nik")
-    .optional()
+    .optional({ nullable: true })
     .isLength({ min: 16, max: 16 })
     .withMessage("NIK harus 16 digit.")
     .custom(async (value) => {
@@ -62,22 +62,22 @@ export const validateCreateUser = [
       }
     }),
 
-  body("photo_ktp").optional(),
+  body("photo_ktp").optional({ nullable: true }).notEmpty(),
 
   body("address")
-    .optional()
+    .optional({ nullable: true })
     .notEmpty()
     .withMessage("Alamat tidak boleh kosong."),
   body("village")
-    .optional()
+    .optional({ nullable: true })
     .notEmpty()
     .withMessage("Desa/Kelurahan tidak boleh kosong."),
   body("subdistrict")
-    .optional()
+    .optional({ nullable: true })
     .notEmpty()
     .withMessage("Kecamatan tidak boleh kosong."),
   body("post_code")
-    .optional()
+    .optional({ nullable: true })
     .notEmpty()
     .withMessage("Kode pos tidak boleh kosong."),
 ];
