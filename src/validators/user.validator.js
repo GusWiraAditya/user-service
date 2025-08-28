@@ -16,16 +16,17 @@ export const validateCreateUser = [
   body("credential_id")
     .notEmpty()
     .withMessage("Credential ID tidak boleh kosong."),
+
   body("nickname").notEmpty().withMessage("Nama panggilan tidak boleh kosong."),
+
   body("phone_number")
     .notEmpty()
     .withMessage("Nomor telepon tidak boleh kosong.")
-    // .isMobilePhone("id-ID")
-    // .withMessage("Format nomor telepon tidak valid.")
     .custom(async (value) => {
       const user = await User.findOne({ where: { phone_number: value } });
       if (user) return Promise.reject("Nomor telepon sudah terdaftar.");
     }),
+
   body("email")
     .notEmpty()
     .withMessage("Email tidak boleh kosong.")
@@ -35,21 +36,21 @@ export const validateCreateUser = [
       const user = await User.findOne({ where: { email: value } });
       if (user) return Promise.reject("Email sudah terdaftar.");
     }),
+
   body("full_name").notEmpty().withMessage("Nama lengkap tidak boleh kosong."),
+
   body("gender").isIn(GENDERS).withMessage("Gender tidak valid."),
+
   body("date_of_birth")
     .isISO8601()
     .toDate()
     .withMessage("Format tanggal lahir tidak valid (YYYY-MM-DD)."),
-  body("address").notEmpty().withMessage("Alamat tidak boleh kosong."),
+
   body("contribution")
     .isIn(CONTRIBUTIONS)
     .withMessage("Tipe kontribusi tidak valid."),
-  body("village").notEmpty().withMessage("Desa/Kelurahan tidak boleh kosong."),
-  body("subdistrict").notEmpty().withMessage("Kecamatan tidak boleh kosong."),
-  body("post_code").notEmpty().withMessage("Kode pos tidak boleh kosong."),
 
-  // Field opsional
+  // Semua field di bawah opsional
   body("no_nik")
     .optional()
     .isLength({ min: 16, max: 16 })
@@ -60,8 +61,25 @@ export const validateCreateUser = [
         if (user) return Promise.reject("NIK sudah terdaftar.");
       }
     }),
-  // body("photo_ktp").optional().isURL().withMessage("URL foto KTP tidak valid."),
+
   body("photo_ktp").optional(),
+
+  body("address")
+    .optional()
+    .notEmpty()
+    .withMessage("Alamat tidak boleh kosong."),
+  body("village")
+    .optional()
+    .notEmpty()
+    .withMessage("Desa/Kelurahan tidak boleh kosong."),
+  body("subdistrict")
+    .optional()
+    .notEmpty()
+    .withMessage("Kecamatan tidak boleh kosong."),
+  body("post_code")
+    .optional()
+    .notEmpty()
+    .withMessage("Kode pos tidak boleh kosong."),
 ];
 
 // Aturan validasi untuk update User
