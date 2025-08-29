@@ -33,11 +33,6 @@ export const verifyInternalRequest = (req, res, next) => {
       console.error("[SECURITY] Gagal mem-parsing header X-User-Info.");
     }
   }
-  console.log("👉 Header diterima:", req.headers["x-internal-secret"]);
-  console.log(
-    "👉 INTERNAL_SECRET_KEY (env user service):",
-    process.env.INTERNAL_SECRET_KEY
-  );
 
   next();
 };

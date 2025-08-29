@@ -1,4 +1,4 @@
-// file: services/user.service.js
+import { Op } from "sequelize";
 import db from "../models/index.js";
 const { User } = db;
 
@@ -31,12 +31,43 @@ export const updateUser = async (id, userData) => {
 };
 
 export const deleteUser = async (id) => {
+ const user = await User.findByPk(id, { paranoid: false });
+  if (!user) return null;
+  await user.destroy({ force: true }); 
+  return { message: "Pengguna berhasil dihapus permanen." };
+};
+
+export const softDeleteUser = async (id) => {
   const user = await User.findByPk(id);
   if (!user) {
     return null;
   }
-  await user.destroy();
-  return { message: "Pengguna berhasil dihapus." };
+  await user.destroy(); 
+  return { message: "Pengguna berhasil dihapus (soft delete)." };
+};
+
+export const restoreUser = async (id) => {
+  const user = await User.findByPk(id, { paranoid: false });
+  if (!user) return null;
+  await user.restore();
+  return { message: "Pengguna berhasil dipulihkan." };
+};
+
+export const getDeletedUsers = async () => {
+  return await User.findAll({
+    where: {
+      deletedAt: { [Op.ne]: null }, 
+    },
+    paranoid: false,
+    attributes: [
+      "id",
+      "full_name",
+      "nickname",
+      "contribution",
+      "phone_number",
+      "deletedAt",
+    ],
+  });
 };
 
 export const updateUserKtp = async (user, filePath) => {
