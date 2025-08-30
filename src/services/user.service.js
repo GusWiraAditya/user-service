@@ -50,7 +50,7 @@ export const restoreUser = async (id) => {
   const user = await User.findByPk(id, { paranoid: false });
   if (!user) return null;
   await user.restore();
-  return { message: "Pengguna berhasil dipulihkan." };
+  return { message: "Pengguna berhasil dipulihkan.", user };
 };
 
 export const getDeletedUsers = async () => {
