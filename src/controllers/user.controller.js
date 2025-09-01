@@ -23,7 +23,7 @@ export const create = async (req, res) => {
 export const findAll = async (req, res) => {
   try {
     const users = await userService.getAllUsers();
-    res.status(200).json(users);
+     res.status(200).json({ data: users });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -72,6 +72,39 @@ export const remove = async (req, res) => {
       return res.status(404).json({ message: "User tidak ditemukan." });
     }
     res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const softRemove = async (req, res) => {
+  try {
+    const result = await userService.softDeleteUser(req.params.id);
+    if (!result) {
+      return res.status(404).json({ message: "User tidak ditemukan." });
+    }
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const restore = async (req, res) => {
+  try {
+    const result = await userService.restoreUser(req.params.id);
+    if (!result) {
+      return res.status(404).json({ message: "User tidak ditemukan." });
+    }
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const findDeleted = async (req, res) => {
+  try {
+    const users = await userService.getDeletedUsers();
+    res.status(200).json({ data: users });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

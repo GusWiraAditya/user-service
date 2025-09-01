@@ -53,6 +53,9 @@ router.get("/", userController.findAll);
 router.get("/:id", userController.findOne);
 router.put("/:id", validateUpdateUser, userController.update);
 router.delete("/:id", userController.remove);
+router.delete("/:id/softDelete", userController.softRemove);
+router.patch("/:id/restore", userController.restore);
+router.get("/deleted/all", userController.findDeleted);
 
 // Route untuk upload KTP
 router.post(

@@ -45,10 +45,6 @@ module.exports = {
         type: Sequelize.DATEONLY,
         allowNull: false,
       },
-      address: {
-        type: Sequelize.TEXT,
-        allowNull: false,
-      },
       no_nik: {
         // Menggunakan STRING untuk NIK karena bisa panjang dan unik
         type: Sequelize.STRING(16),
@@ -70,18 +66,25 @@ module.exports = {
         ),
         allowNull: false,
       },
+      address: {
+        type: Sequelize.TEXT,
+        allowNull: true, 
+      },
       village: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true, 
       },
       subdistrict: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true, 
       },
       post_code: {
-        // Kode pos juga lebih baik sebagai STRING
         type: Sequelize.STRING(10),
-        allowNull: false,
+        allowNull: true, 
+      },
+      deletedAt: {
+        allowNull: true,
+        type: Sequelize.DATE,
       },
       createdAt: {
         allowNull: false,

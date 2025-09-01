@@ -36,11 +36,13 @@ export default (sequelize, DataTypes) => {
       village: DataTypes.STRING,
       subdistrict: DataTypes.STRING,
       post_code: DataTypes.STRING(10),
+      deletedAt: DataTypes.DATE,
     },
     {
       sequelize,
       modelName: "User",
       timestamps: true,
+      paranoid: true,
     }
   );
   return User;
